@@ -67,6 +67,19 @@ Or with docker compose:
 docker compose up -d --build
 ```
 
+### Updating
+
+```bash
+./update.sh
+```
+
+Pulls the latest upstream base image, rebuilds `open-webui:vision` on top, verifies the patched
+loader survived (file present + `PDFLoader` constructor signature unchanged), then replaces the
+running container. If the signature check fails, upstream changed the loader interface — rework
+`pdf-vision/pdf.py` against the new `retrieval/loaders/pdf.py` before trusting ingestion again.
+
+Your data and the vision cache live in the `open-webui` named volume and are untouched by updates.
+
 ### 3. Re-ingest existing PDFs
 
 PDFs ingested before the patch keep their old (text-only) chunks. Re-upload them, or remove and
