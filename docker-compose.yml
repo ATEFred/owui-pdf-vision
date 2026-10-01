@@ -1,0 +1,20 @@
+services:
+  open-webui:
+    image: open-webui:vision
+    build: ./pdf-vision
+    container_name: open-webui
+    network_mode: host
+    environment:
+      PORT: "3000"
+      WEBUI_HOST: "0.0.0.0"
+      WEBUI_SECRET: "${WEBUI_SECRET:-please-change-me}"
+      OPENAI_API_BASE_URLS: '["http://127.0.0.1:8080/v1","http://127.0.0.1:8081/v1"]'
+      OLLAMA_BASE_URLS: '[]'
+      ENABLE_SIGNUP: "true"
+      PDF_VISION_MODEL: "${PDF_VISION_MODEL:-Qwen3.8 Flash Next}"
+      PDF_VISION_API_BASE_URL: "${PDF_VISION_API_BASE_URL:-http://127.0.0.1:8080/v1}"
+    volumes:
+      - open-webui:/app/backend/data
+    restart: unless-stopped
+volumes:
+  open-webui:
